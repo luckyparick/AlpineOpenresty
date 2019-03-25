@@ -1,8 +1,8 @@
-M isaackuang/alpine-base:3.8.0
+FROM isaackuang/alpine-base:3.8.0
 
-ARG RESTY_VERSION="1.13.6.1"
-ARG RESTY_OPENSSL_VERSION="1.0.2q"
-ARG RESTY_PCRE_VERSION="8.42"
+ARG RESTY_VERSION="1.11.2.5"
+ARG RESTY_OPENSSL_VERSION="1.0.2l"
+ARG RESTY_PCRE_VERSION="8.41"
 ARG RESTY_J="1"
 ARG RESTY_CONFIG_OPTIONS="\
     --prefix=/etc/openresty \
@@ -40,7 +40,7 @@ ARG _RESTY_CONFIG_DEPS="--with-openssl=/tmp/openssl-${RESTY_OPENSSL_VERSION} --w
 RUN apk add --no-cache --virtual .build-deps \
         build-base curl gd-dev geoip-dev libxslt-dev \
         linux-headers make perl-dev readline-dev zlib-dev && \
-    apk add --no-cache gd geoip libgcc libxslt zlib git unzip openssl && \
+    apk add --no-cache gd geoip libgcc libxslt zlib && \
     cd /tmp && \
     curl -fSL https://www.openssl.org/source/openssl-${RESTY_OPENSSL_VERSION}.tar.gz -o openssl-${RESTY_OPENSSL_VERSION}.tar.gz && \
     tar xzf openssl-${RESTY_OPENSSL_VERSION}.tar.gz && \
@@ -58,21 +58,7 @@ RUN apk add --no-cache --virtual .build-deps \
         openssl-${RESTY_OPENSSL_VERSION}.tar.gz \
         openresty-${RESTY_VERSION}.tar.gz openresty-${RESTY_VERSION} \
         pcre-${RESTY_PCRE_VERSION}.tar.gz pcre-${RESTY_PCRE_VERSION} && \
-    cd /tmp && \
-    wget http://luarocks.github.io/luarocks/releases/luarocks-3.0.4.tar.gz && \
-    tar zxvf luarocks-3.0.4.tar.gz && \
-    cd luarocks-3.0.4/ && \
-    ./configure \
-        --prefix=/etc/openresty/luajit/ \
-        --with-lua-bin=/etc/openresty/luajit/bin \
-        --with-lua-include=/etc/openresty/luajit/include/luajit-2.1 && \
-    make && make install && \
-    ln -s /etc/openresty/luajit/bin/luarocks /usr/local/bin/. && \
-    cd /tmp && \
-    rm -rf luarocks* && \
-    luarocks install dkjson && \
     apk del .build-deps
 
 
 COPY config /
-
