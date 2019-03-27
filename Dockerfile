@@ -1,4 +1,4 @@
-FROM isaackuang/alpine-base:3.8.0
+FROM ricksu0218/alpine-base:3.8.0
 
 ARG RESTY_VERSION="1.11.2.5"
 ARG RESTY_OPENSSL_VERSION="1.0.2l"
